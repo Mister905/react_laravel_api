@@ -1,0 +1,102 @@
+vagrant ssh
+
+laravel new project_name
+
+configure APP_NAME, APP_URL, & DB in .env
+
+update user schema in create_users_table migration file
+
+update user model to include new fields
+
+php artisan migrate:refresh
+
+php artisan make:controller TestController
+
+routes/api.php
+
+** Removing the api path prefix **
+app/Providers/RouteServiceProvider.js
+remove $this->mapWebRoutes();
+remove prefix('api')->
+
+** Installing Passport **
+https://laravel.com/docs/7.x/passport#introduction
+composer require laravel/passport
+php artisan migrate:refresh
+php artisan passport:install
+^Store the two secrets in .ENV
+php artisan passport:client --personal (need to run this after refresh migration)
+
+After running this command, add the Laravel\Passport\HasApiTokens trait to your App\User model
+
+Next, you should call the Passport::routes method within the boot method of your AuthServiceProvider. This method will register the routes necessary to issue access tokens and revoke access tokens, clients, and personal access tokens
+
+Finally, in your config/auth.php configuration file, you should set the driver option of the api authentication guard to passport. This will instruct your application to use Passport's TokenGuard when authenticating incoming API requests
+
+** Seed User Data **
+database/factories/UserFactory.js
+
+'first_name' => $faker->firstName(),
+'last_name' => $faker->lastName(),
+'email' => $faker->unique()->safeEmail,
+'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // encrypted string = password
+
+php artisan make:seeder UsersTableSeeder
+
+app/database/seeds/UsersTableSeeder
+factory(User::class, 10)->create();
+
+app/database/seeds/DatabaseSeeder
+$this->call(UsersTableSeeder::class);
+
+php artisan db:seed
+
+If error
+https://stackoverflow.com/a/55002037/12928188
+composer dumpautoload
+
+php artisan make:controller AuthController
+
+Add API routes for auth controller actions in routes/api.php
+
+** Route Validation **
+php artisan make:request RegisterRequest
+app/Http/Requests/RegisterRequest.php
+review authorize method
+update the request argument inside the register route
+
+
+https://stackoverflow.com/a/39238342/12928188
+So you should add one of the following headers manually:
+Accept: application/json
+X-Requested-With: XMLHttpRequest
+
+** Forgot Password **
+I had to manually create the reset password migration file
+https://github.com/laravel/laravel/blob/5.0/database/migrations/2014_10_12_100000_create_password_resets_table.php
+php artisan make:controller PasswordController
+php artisan make:request ForgotPasswordRequest
+review authorize method
+update the request argument inside the forgot password method
+
+** Mailtrap **
+https://mailtrap.io/inboxes
+MAIL_USERNAME=d4643680d3cf6b
+MAIL_PASSWORD=5ed2d9bb46c00d
+MAIL_FROM_ADDRESS=from@example.com
+
+mkdir resources/views/mail/forgot_password.blade.php
+
+php artisan make:request ResetPasswordRequest
+review authorize method
+update the request argument inside the reset password method
+
+** CORS **
+bootstrap/cache/app.js
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: *');
+header('Access-Control-Allow-Headers: *');
+
+** React **
+npx create-react-app client
+npm install materialize-css@next 

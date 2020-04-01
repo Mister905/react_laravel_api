@@ -1,0 +1,1 @@
+Change your password <a href="http://auth.test/reset/{{$token}}">here</a>
