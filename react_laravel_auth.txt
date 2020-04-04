@@ -9,6 +9,7 @@ update user schema in create_users_table migration file
 update user model to include new fields
 
 php artisan migrate:refresh
+php artisan passport:client --personal (need to run this after refresh migration)
 
 php artisan make:controller TestController
 
@@ -103,3 +104,28 @@ header('Access-Control-Allow-Headers: *');
 ** React **
 npx create-react-app client
 npm install materialize-css@next 
+
+** Products **
+php artisan make:model Product -m (Create model and generate db migration)
+php artisan migrate
+
+php artisan make:controller ProductsController
+import model objects into controller at top of file
+
+php artisan make:request CreateProductRequest
+app/Http/Requests/CreateProductRequest.php
+review authorize method
+update the request argument inside the create product route
+
+** API Authentication **
+Laravel includes an authentication guard that will automatically validate API tokens on incoming requests. You only need to specify the auth:api middleware on any route that requires a valid access token
+
+Define index method inside ProductsController
+Define protected index route inside api.php
+
+** File Storage **
+The public disk is intended for files that are going to be publicly accessible. By default, the public disk uses the local driver and stores these files in storage/app/public. To make them accessible from the web, you should create a symbolic link from public/storage to storage/app/public. This convention will keep your publicly accessible files in one directory that can be easily shared across deployments when using zero down-time deployment systems like Envoyer.
+
+To create the symbolic link, you may use the storage:link Artisan command:
+
+php artisan storage:link (run locally, not in VM)

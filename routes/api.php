@@ -24,3 +24,6 @@ Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
 Route::post('forgot', 'PasswordController@forgot_password');
 Route::post('reset', 'PasswordController@reset_password');
+// Products
+Route::get('products', 'ProductsController@index')->middleware('auth:api');
+Route::post('products/create', 'ProductsController@create')->middleware('auth:api');
